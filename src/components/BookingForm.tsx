@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Icon } from "@/components/icons";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { addBooking, clearService, selectServiceId, type Booking } from "@/lib/store";
-import { clinic, services, therapists, timeSlots } from "@/lib/data";
-import type { Service, Therapist } from "@/lib/data";
+import { clinic, services } from "@/lib/data";
+import type { Service } from "@/lib/data";
 
 type FormState = {
   name: string;
@@ -17,16 +17,46 @@ type FormState = {
 
 const EMPTY_FORM: FormState = { name: "", email: "", phone: "", notes: "" };
 
-function generateDays(count: number): Date[] {
-  const days: Date[] = [];
-  const today = new Date();
-  let d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-  while (days.length < count) {
-    if (d.getDay() !== 0) days.push(new Date(d));
-    d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
-  }
-  return days;
+function makeReference(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "";
+  for (let i = 0; i < 6; i += 1) out += chars[Math.floor(Math.random() * chars.length)];
+  return `PC-${out}`;
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Calendar helpers                                                          */
+/* -------------------------------------------------------------------------- */
+
+function daysInMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+function startDayOfMonth(year: number, month: number): number {
+  return new Date(year, month, 1).getDay(); // 0 = Sun
+}
+
+function isSameDay(a: Date, b: Date): boolean {
+  return a.toDateString() === b.toDateString();
+}
+
+function isToday(d: Date, ref?: Date): boolean {
+  return isSameDay(d, ref ?? new Date());
+}
+
+function isPast(d: Date, ref?: Date): boolean {
+  const today = ref ?? new Date();
+  const norm = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const normToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  return norm < normToday;
+}
+
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const DAY_HEADERS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 function formatFullDate(d: Date): string {
   return d.toLocaleDateString("en-US", {
@@ -35,25 +65,6 @@ function formatFullDate(d: Date): string {
     day: "numeric",
     year: "numeric",
   });
-}
-
-function dayLabel(d: Date): string {
-  return d.toLocaleDateString("en-US", { weekday: "short" });
-}
-
-function dayNum(d: Date): number {
-  return d.getDate();
-}
-
-function dayMonth(d: Date): string {
-  return d.toLocaleDateString("en-US", { month: "short" });
-}
-
-function makeReference(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let out = "";
-  for (let i = 0; i < 6; i += 1) out += chars[Math.floor(Math.random() * chars.length)];
-  return `PC-${out}`;
 }
 
 export default function BookingForm() {
@@ -65,12 +76,14 @@ export default function BookingForm() {
 
   const [step, setStep] = useState(initialServiceId ? 2 : 1);
   const [serviceId, setServiceId] = useState<string | null>(initialServiceId);
-  const [therapistId, setTherapistId] = useState<string | null>(null);
   const [date, setDate] = useState<Date | null>(null);
-  const [time, setTime] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [days, setDays] = useState<Date[]>([]);
+  const [calendarMonth, setCalendarMonth] = useState<{ year: number; month: number }>({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(),
+  });
+  const [clientNow, setClientNow] = useState<Date | null>(null);
   const [confirmed, setConfirmed] = useState<Booking | null>(null);
   const [toast, setToast] = useState<{ type: "error" | "success"; message: string } | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -89,10 +102,8 @@ export default function BookingForm() {
   }, []);
 
   useEffect(() => {
-    // Populate available dates on the client only (keeps server and client
-    // markup identical and avoids a hydration mismatch).
-    const id = requestAnimationFrame(() => setDays(generateDays(14)));
-    return () => cancelAnimationFrame(id);
+    // Hydrate client-only date to avoid server/client mismatch
+    setClientNow(new Date());
   }, []);
 
   // Scroll the step content to top whenever the step changes
@@ -101,7 +112,20 @@ export default function BookingForm() {
   }, [step]);
 
   const service = services.find((s) => s.id === serviceId) ?? null;
-  const therapist = therapists.find((t) => t.id === therapistId) ?? null;
+
+  function handleMonthChange(dir: -1 | 1) {
+    setCalendarMonth((prev) => {
+      const d = new Date(prev.year, prev.month + dir, 1);
+      // Prevent navigating to past months
+      const now = new Date();
+      const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      if (d < currentMonthStart) return prev;
+      // Limit to 12 months out
+      const max = new Date(now.getFullYear(), now.getMonth() + 12, 1);
+      if (d > max) return prev;
+      return { year: d.getFullYear(), month: d.getMonth() };
+    });
+  }
 
   function updateField(field: keyof FormState, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -109,13 +133,12 @@ export default function BookingForm() {
 
   function stepError(s: number): string | null {
     if (s === 1 && !serviceId) return "Please select a service to continue.";
-    if (s === 2 && !therapistId) return "Please choose a therapist to continue.";
-    if (s === 3 && (!date || !time)) return "Please select both a date and a time.";
-    if (s === 4) {
+    if (s === 2 && !date) return "Please select a date.";
+    if (s === 3) {
       const errs: Record<string, string> = {};
       if (!form.name.trim()) errs.name = "Full name is required";
       if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) errs.email = "Enter a valid email address";
-      if (!/^[+\d][\d\s().-]{6,}$/.test(form.phone.trim())) errs.phone = "Enter a valid phone number";
+      if (!/^(\+?91[\s-]?)?[6-9]\d{9}$/.test(form.phone.trim())) errs.phone = "Enter a valid Indian mobile number";
       setErrors(errs);
       if (Object.keys(errs).length > 0) return "Please complete the required details correctly.";
     }
@@ -128,44 +151,74 @@ export default function BookingForm() {
       showToast("error", err);
       return;
     }
-    setStep((s) => Math.min(5, s + 1));
+    setStep((s) => Math.min(4, s + 1));
   }
 
   function back() {
     setStep((s) => Math.max(1, s - 1));
   }
 
-  function confirm() {
-    if (!service || !therapist || !date || !time) {
+  async function confirm() {
+    if (!service || !date) {
       showToast("error", "Please complete all steps before confirming.");
       return;
     }
     const booking: Booking = {
       reference: makeReference(),
       service,
-      therapist,
       date: formatFullDate(date),
-      time,
       name: form.name.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
       notes: form.notes.trim(),
     };
+    
+    // Send booking confirmation emails
+    try {
+      const response = await fetch("/api/send-booking-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: booking.name,
+          email: booking.email,
+          phone: booking.phone,
+          service: booking.service.title,
+          date: booking.date,
+          notes: booking.notes,
+          reference: booking.reference,
+        }),
+      });
+      
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as { error?: string } | null;
+        showToast("error", result?.error ?? "We could not complete the booking. Please try again.");
+        return;
+      }
+
+      const result = (await response.json().catch(() => null)) as { warning?: string } | null;
+      if (result?.warning) {
+        showToast("error", result.warning);
+      }
+    } catch (error) {
+      console.error("Error sending booking emails:", error);
+      showToast("error", "We could not complete the booking. Please try again.");
+      return;
+    }
+    
     dispatch(addBooking(booking));
     setConfirmed(booking);
     dispatch(clearService());
-    showToast("success", "Appointment confirmed successfully!");
+    showToast("success", "Appointment request received successfully!");
   }
 
   function reset() {
     setConfirmed(null);
     setStep(1);
     setServiceId(null);
-    setTherapistId(null);
     setDate(null);
-    setTime(null);
     setForm(EMPTY_FORM);
     setErrors({});
+    setCalendarMonth({ year: new Date().getFullYear(), month: new Date().getMonth() });
     dispatch(clearService());
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -184,21 +237,20 @@ export default function BookingForm() {
         </div>
 
         {/* Step content */}
-        <div ref={contentRef} className="h-[350px] overflow-y-auto px-6 py-6 sm:px-8">
+        <div ref={contentRef} className="h-[340px] overflow-y-auto px-6 py-4 sm:px-8">
           {step === 1 && <StepOne value={serviceId} onSelect={setServiceId} />}
-          {step === 2 && <StepTwo value={therapistId} onSelect={setTherapistId} />}
-          {step === 3 && (
-            <StepThree
-              days={days}
+          {step === 2 && (
+            <StepTwo
+              calendarMonth={calendarMonth}
               selectedDate={date}
-              selectedTime={time}
+              clientNow={clientNow}
               onSelectDate={setDate}
-              onSelectTime={setTime}
+              onMonthChange={handleMonthChange}
             />
           )}
-          {step === 4 && <StepFour form={form} errors={errors} onChange={updateField} />}
-          {step === 5 && (
-            <Review service={service} therapist={therapist} date={date} time={time} form={form} />
+          {step === 3 && <StepThree form={form} errors={errors} onChange={updateField} />}
+          {step === 4 && (
+            <Review service={service} date={date} form={form} />
           )}
         </div>
 
@@ -217,7 +269,7 @@ export default function BookingForm() {
             ) : (
               <span />
             )}
-            {step < 5 ? (
+            {step < 4 ? (
               <button
                 type="button"
                 onClick={next}
@@ -242,7 +294,7 @@ export default function BookingForm() {
 
       <div className="space-y-6">
         <ProcessCard />
-        <Summary service={service} therapist={therapist} date={date} time={time} />
+        <Summary service={service} date={date} />
       </div>
         </div>
       )}
@@ -251,7 +303,7 @@ export default function BookingForm() {
 }
 
 function StepIndicator({ step }: { step: number }) {
-  const labels = ["Service", "Therapist", "Schedule", "Details", "Confirm"];
+  const labels = ["Service", "Schedule", "Details", "Confirm"];
   return (
     <div className="flex items-start">
       {labels.map((label, i) => {
@@ -338,50 +390,106 @@ function StepOne({
 }
 
 function StepTwo({
-  value,
-  onSelect,
+  calendarMonth,
+  selectedDate,
+  clientNow,
+  onSelectDate,
+  onMonthChange,
 }: {
-  value: string | null;
-  onSelect: (id: string) => void;
+  calendarMonth: { year: number; month: number };
+  selectedDate: Date | null;
+  clientNow: Date | null;
+  onSelectDate: (d: Date) => void;
+  onMonthChange: (dir: -1 | 1) => void;
 }) {
+  const { year, month } = calendarMonth;
+  const totalDays = daysInMonth(year, month);
+  const startDay = startDayOfMonth(year, month);
+
+  const isPrevDisabled =
+    new Date(year, month, 1) <= new Date(clientNow?.getFullYear() ?? 2024, clientNow?.getMonth() ?? 0, 1);
+
+  // Build grid cells: leading blanks + day numbers
+  const cells: (number | null)[] = [];
+  for (let i = 0; i < startDay; i += 1) cells.push(null);
+  for (let d = 1; d <= totalDays; d += 1) cells.push(d);
+
+  const today = clientNow ?? new Date();
+
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900">Choose your therapist</h2>
-      <p className="mt-1 text-sm text-slate-500">Our licensed physiotherapists are here to help.</p>
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        {therapists.map((t) => {
-          const selected = value === t.id;
+      <h2 className="text-xl font-bold text-slate-900">Pick a date</h2>
+      <p className="mt-1 text-sm text-slate-500">Choose a convenient appointment date.</p>
+
+      {/* Month navigation */}
+      <div className="mt-3 flex items-center justify-between">
+        <button
+          type="button"
+          disabled={isPrevDisabled}
+          onClick={() => onMonthChange(-1)}
+          className={`inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-colors ${
+            isPrevDisabled
+              ? "cursor-not-allowed text-slate-300"
+              : "text-slate-600 hover:bg-slate-100"
+          }`}
+          aria-label="Previous month"
+        >
+          <Icon name="chevron-left" className="h-4 w-4" />
+        </button>
+        <span className="text-sm font-semibold text-slate-800">
+          {MONTH_NAMES[month]} {year}
+        </span>
+        <button
+          type="button"
+          onClick={() => onMonthChange(1)}
+          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-slate-600 transition-colors hover:bg-slate-100"
+          aria-label="Next month"
+        >
+          <Icon name="chevron-right" className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Day-of-week headers */}
+      <div className="mt-3 grid grid-cols-7">
+        {DAY_HEADERS.map((h) => (
+          <span
+            key={h}
+            className="py-0.5 text-center text-xs font-medium uppercase tracking-wide text-slate-400"
+          >
+            {h}
+          </span>
+        ))}
+      </div>
+
+      {/* Calendar grid */}
+      <div className="mt-0.5 grid grid-cols-7 gap-y-0.5">
+        {cells.map((day, idx) => {
+          if (day === null) {
+            return <div key={`empty-${idx}`} />;
+          }
+
+          const cellDate = new Date(year, month, day);
+          const disabled = cellDate.getDay() === 0 || isPast(cellDate, today);
+          const selected = selectedDate ? isSameDay(cellDate, selectedDate) : false;
+          const todayClass = isToday(cellDate, today);
+
           return (
             <button
-              key={t.id}
+              key={day}
               type="button"
-              onClick={() => onSelect(t.id)}
-              className={`cursor-pointer rounded-2xl border p-5 text-left transition-all ${
+              disabled={disabled}
+              onClick={() => onSelectDate(cellDate)}
+              className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${
                 selected
-                  ? "border-brand-600 bg-brand-50 ring-2 ring-brand-100"
-                  : "border-slate-200 bg-white hover:border-brand-300"
+                  ? "bg-brand-600 text-white"
+                  : disabled
+                    ? "cursor-not-allowed text-slate-300"
+                    : todayClass
+                      ? "text-brand-700 ring-1 ring-brand-300 hover:bg-brand-50"
+                      : "text-slate-700 hover:bg-brand-50"
               }`}
             >
-              <div className="flex items-center gap-3">
-                <span
-                  className={`flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold ${
-                    selected ? "bg-brand-600 text-white" : "bg-brand-100 text-brand-700"
-                  }`}
-                >
-                  {t.initials}
-                </span>
-                <div>
-                  <p className="font-semibold text-slate-900">{t.name}</p>
-                  <p className="text-sm text-slate-500">{t.title}</p>
-                </div>
-              </div>
-              <p className="mt-3 text-sm text-slate-600">{t.specialty}</p>
-              <div className="mt-3 flex items-center gap-2 text-sm text-slate-600">
-                <Icon name="star" className="h-4 w-4 text-amber-400" />
-                <span className="font-semibold text-slate-900">{t.rating.toFixed(1)}</span>
-                <span className="text-slate-400">·</span>
-                <span>{t.experience} yrs exp</span>
-              </div>
+              {day}
             </button>
           );
         })}
@@ -391,81 +499,6 @@ function StepTwo({
 }
 
 function StepThree({
-  days,
-  selectedDate,
-  selectedTime,
-  onSelectDate,
-  onSelectTime,
-}: {
-  days: Date[];
-  selectedDate: Date | null;
-  selectedTime: string | null;
-  onSelectDate: (d: Date) => void;
-  onSelectTime: (t: string) => void;
-}) {
-  return (
-    <div>
-      <h2 className="text-xl font-bold text-slate-900">Pick a date &amp; time</h2>
-      <p className="mt-1 text-sm text-slate-500">Choose a convenient appointment slot.</p>
-
-      <p className="mt-6 text-sm font-semibold text-slate-700">Date</p>
-      <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
-        {days.map((d) => {
-          const selected = selectedDate?.toDateString() === d.toDateString();
-          return (
-            <button
-              key={d.toISOString()}
-              type="button"
-              onClick={() => onSelectDate(d)}
-              className={`flex min-w-[64px] cursor-pointer flex-col items-center rounded-xl border px-3 py-2.5 transition-all ${
-                selected
-                  ? "border-brand-600 bg-brand-600 text-white"
-                  : "border-slate-200 bg-white text-slate-700 hover:border-brand-300"
-              }`}
-            >
-              <span className={`text-xs ${selected ? "text-brand-100" : "text-slate-400"}`}>
-                {dayLabel(d)}
-              </span>
-              <span className="text-lg font-bold leading-tight">{dayNum(d)}</span>
-              <span className={`text-xs ${selected ? "text-brand-100" : "text-slate-400"}`}>
-                {dayMonth(d)}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      <p className="mt-6 text-sm font-semibold text-slate-700">Time</p>
-      {selectedDate ? (
-        <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {timeSlots.map((t) => {
-            const selected = selectedTime === t;
-            return (
-              <button
-                key={t}
-                type="button"
-                onClick={() => onSelectTime(t)}
-                className={`cursor-pointer rounded-xl border px-2 py-2.5 text-sm font-medium transition-all ${
-                  selected
-                    ? "border-brand-600 bg-brand-600 text-white"
-                    : "border-slate-200 bg-white text-slate-700 hover:border-brand-300"
-                }`}
-              >
-                {t}
-              </button>
-            );
-          })}
-        </div>
-      ) : (
-        <p className="mt-3 rounded-xl bg-slate-50 p-4 text-sm text-slate-500">
-          Select a date to view available times.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function StepFour({
   form,
   errors,
   onChange,
@@ -502,27 +535,32 @@ function StepFour({
           />
           {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
         </div>
-        <div className="sm:col-span-2">
+        <div>
           <label className="mb-1 block text-sm font-medium text-slate-700">Phone</label>
           <input
             type="tel"
             className={input}
-            placeholder="+1 (555) 000-0000"
+            placeholder="+91 98765 43210"
             value={form.phone}
             onChange={(e) => onChange("phone", e.target.value)}
           />
           {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
         </div>
-        <div className="sm:col-span-2">
+        <div>
           <label className="mb-1 block text-sm font-medium text-slate-700">
             Notes <span className="text-slate-400">(optional)</span>
           </label>
           <textarea
-            rows={3}
-            className={input}
+            rows={1}
+            className={`${input} resize-none`}
             placeholder="Describe your symptoms or anything we should know..."
             value={form.notes}
             onChange={(e) => onChange("notes", e.target.value)}
+            onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "auto";
+              el.style.height = `${el.scrollHeight}px`;
+            }}
           />
         </div>
       </div>
@@ -532,22 +570,16 @@ function StepFour({
 
 function Review({
   service,
-  therapist,
   date,
-  time,
   form,
 }: {
   service: Service | null;
-  therapist: Therapist | null;
   date: Date | null;
-  time: string | null;
   form: FormState;
 }) {
   const rows = [
     { label: "Service", value: service ? service.title : "—" },
-    { label: "Therapist", value: therapist?.name ?? "—" },
     { label: "Date", value: date ? formatFullDate(date) : "—" },
-    { label: "Time", value: time ?? "—" },
     { label: "Patient", value: form.name || "—" },
     { label: "Contact", value: [form.email, form.phone].filter(Boolean).join(" · ") || "—" },
   ];
@@ -587,23 +619,17 @@ function ProcessCard() {
 
 function Summary({
   service,
-  therapist,
   date,
-  time,
 }: {
   service: Service | null;
-  therapist: Therapist | null;
   date: Date | null;
-  time: string | null;
 }) {
   return (
     <aside className="h-fit rounded-2xl border border-slate-200 bg-slate-50 p-6 lg:sticky lg:top-24">
       <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">Your booking</h3>
       <div className="mt-4 space-y-4 text-sm">
         <SummaryRow label="Service" value={service ? service.title : "Not selected"} />
-        <SummaryRow label="Therapist" value={therapist?.name ?? "Not selected"} />
         <SummaryRow label="Date" value={date ? formatFullDate(date) : "Not selected"} />
-        <SummaryRow label="Time" value={time ?? "Not selected"} />
       </div>
       <p className="mt-6 flex items-start gap-2 text-xs text-slate-500">
         <Icon name="shield" className="mt-0.5 h-4 w-4 shrink-0 text-brand-500" />
@@ -628,25 +654,15 @@ function Confirmation({ booking, onReset }: { booking: Booking; onReset: () => v
       <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-100 text-brand-700">
         <Icon name="check" className="h-8 w-8" />
       </span>
-      <h2 className="mt-6 text-2xl font-bold text-slate-900">Appointment confirmed!</h2>
+      <h2 className="mt-6 text-2xl font-bold text-slate-900">Appointment Received successfully</h2>
       <p className="mt-2 text-slate-600">
-        Thank you, {booking.name}. A confirmation email has been sent to {booking.email}.
+        Thank you, {booking.name}. We&apos;ve received your appointment request. Our team will call you at {booking.phone} shortly to confirm your booking. You will also receive an email from us with your appointment details.
       </p>
 
       <div className="mt-8 rounded-2xl bg-slate-50 p-6 text-left">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-            Booking reference
-          </p>
-          <p className="rounded-lg bg-white px-3 py-1 text-sm font-bold tracking-wider text-brand-700">
-            {booking.reference}
-          </p>
-        </div>
-        <dl className="mt-4 space-y-3 text-sm">
+        <dl className="space-y-3 text-sm">
           <ConfirmationRow label="Service" value={booking.service.title} />
-          <ConfirmationRow label="Therapist" value={booking.therapist.name} />
           <ConfirmationRow label="Date" value={booking.date} />
-          <ConfirmationRow label="Time" value={booking.time} />
           <ConfirmationRow label="Location" value={clinic.address} />
         </dl>
       </div>

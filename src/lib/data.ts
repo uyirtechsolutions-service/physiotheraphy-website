@@ -8,6 +8,17 @@ import {
   rehabExerciseImage,
   careTeamImage,
   homeVisitImage,
+  neurologicalRehabilitationImage,
+  orthopedicRehabilitationImage,
+  painManagementImage,
+  serviceLogoPain,
+  serviceLogoOrthopedic,
+  serviceLogoNeurological,
+  serviceLogoGeriatric,
+  serviceLogoWomensHealth,
+  serviceLogoPregnancy,
+  serviceLogoPelvicFloor,
+  serviceLogoOnline,
 } from "./images";
 
 export type Service = {
@@ -16,6 +27,7 @@ export type Service = {
   description: string;
   icon: string;
   image: StaticImageData;
+  logo?: StaticImageData;
 };
 
 export type Therapist = {
@@ -33,8 +45,9 @@ export const clinic = {
   tagline: "Physiotherapy & Rehabilitation",
   phone: "+91 81228 86662",
   whatsapp: "918122886662",
-  email: "theoriginphysio@gmail.com",
+  email: "theorigin.physios@gmail.com",
   address: "Saibaba Colony, Coimbatore, Tamil Nadu, India",
+  mapsUrl: "https://maps.google.com/maps?q=11.0253336%2C76.9444102&z=17&hl=en",
   hours: [
     { days: "Monday – Saturday", time: "9:00 AM – 8:00 PM" },
     { days: "Sunday", time: "Closed" },
@@ -48,7 +61,8 @@ export const services: Service[] = [
     description:
       "Targeted relief for chronic and acute pain through manual therapy, modalities and therapeutic exercise.",
     icon: "zap",
-    image: aboutStoryImage,
+    image: painManagementImage,
+    logo: serviceLogoPain,
   },
   {
     id: "orthopedic-rehab",
@@ -56,7 +70,8 @@ export const services: Service[] = [
     description:
       "Recovery for fractures, joint replacements and musculoskeletal injuries to restore strength and mobility.",
     icon: "bone",
-    image: rehabExerciseImage,
+    image: orthopedicRehabilitationImage,
+    logo: serviceLogoOrthopedic,
   },
   {
     id: "neurological-rehab",
@@ -64,7 +79,8 @@ export const services: Service[] = [
     description:
       "Specialized therapy for stroke, Parkinson's and spinal cord injuries to rebuild function and independence.",
     icon: "sparkles",
-    image: aboutClinicImage,
+    image: neurologicalRehabilitationImage,
+    logo: serviceLogoNeurological,
   },
   {
     id: "geriatric-rehab",
@@ -73,6 +89,7 @@ export const services: Service[] = [
       "Gentle, safe programs for older adults to improve balance, prevent falls and maintain independence.",
     icon: "users",
     image: careTeamImage,
+    logo: serviceLogoGeriatric,
   },
   {
     id: "womens-health",
@@ -81,6 +98,7 @@ export const services: Service[] = [
       "Holistic physiotherapy for women at every stage of life, from adolescence to menopause.",
     icon: "heart",
     image: whyUsImage,
+    logo: serviceLogoWomensHealth,
   },
   {
     id: "pre-post-pregnancy",
@@ -89,6 +107,7 @@ export const services: Service[] = [
       "Supportive care through pregnancy and post-partum to manage pain, restore core strength and aid recovery.",
     icon: "baby",
     image: servicesImage,
+    logo: serviceLogoPregnancy,
   },
   {
     id: "pelvic-floor",
@@ -97,6 +116,7 @@ export const services: Service[] = [
       "Specialized treatment for pelvic floor dysfunction, incontinence and post-natal recovery.",
     icon: "activity",
     image: careTeamImage,
+    logo: serviceLogoPelvicFloor,
   },
   {
     id: "pulmonary-rehab",
@@ -121,6 +141,7 @@ export const services: Service[] = [
       "Video consultations and guided exercise programs with a physiotherapist from anywhere.",
     icon: "video",
     image: contactImage,
+    logo: serviceLogoOnline,
   },
 ];
 

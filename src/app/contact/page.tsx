@@ -45,7 +45,7 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative flex min-h-[440px] items-center overflow-hidden">
+      <section className="relative flex min-h-[340px] items-center overflow-hidden">
         <Image
           src={contactImage}
           alt="A friendly physiotherapy team ready to help you"

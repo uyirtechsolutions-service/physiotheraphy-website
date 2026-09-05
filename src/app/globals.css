@@ -1,19 +1,32 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #eefbf7;
-  --color-brand-100: #d3f4ec;
-  --color-brand-200: #a9e8da;
-  --color-brand-300: #72d5c2;
-  --color-brand-400: #3ebba6;
-  --color-brand-500: #20a08c;
-  --color-brand-600: #158073;
-  --color-brand-700: #12665d;
-  --color-brand-800: #12524b;
-  --color-brand-900: #11443f;
-  --color-brand-950: #052826;
+  --color-brand-50: #f7f3ea;
+  --color-brand-100: #e8dcc8;
+  --color-brand-200: #e8dcc8;
+  --color-brand-300: #a9b5a1;
+  --color-brand-400: #a9b5a1;
+  --color-brand-500: #405646;
+  --color-brand-600: #405646;
+  --color-brand-700: #24362b;
+  --color-brand-800: #24362b;
+  --color-brand-900: #24362b;
+  --color-brand-950: #1b2921;
+  --color-slate-50: #f7f3ea;
+  --color-slate-100: #e8dcc8;
+  --color-slate-200: #e8dcc8;
+  --color-slate-300: #a9b5a1;
+  --color-slate-400: #a9b5a1;
+  --color-slate-500: #6f796e;
+  --color-slate-600: #405646;
+  --color-slate-700: #24362b;
+  --color-slate-800: #24362b;
+  --color-slate-900: #24362b;
+  --color-slate-950: #1b2921;
+  --color-brand-gold: #c6a24a;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: Georgia, Cambria, "Times New Roman", serif;
   --animate-float: float 6s ease-in-out infinite;
   --animate-fade-up: fade-up 0.7s ease-out both;
   --animate-pulse-slow: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -46,8 +59,8 @@ html {
 
 body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  color: #0f172a;
-  background-color: #ffffff;
+  color: var(--color-brand-800);
+  background-color: var(--color-brand-50);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -59,21 +72,29 @@ button:not(:disabled),
 }
 
 ::selection {
-  background-color: #158073;
-  color: #ffffff;
+  background-color: #e8dcc8;
+  color: #24362b;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 /* Slim, branded scrollbars for a polished feel */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #a9e8da transparent;
+  scrollbar-color: #a9b5a1 transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #a9e8da;
+  background-color: #a9b5a1;
   border-radius: 9999px;
 }
 *::-webkit-scrollbar-track {

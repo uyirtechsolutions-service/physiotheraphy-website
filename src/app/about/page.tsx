@@ -178,7 +178,7 @@ export default function AboutPage() {
                 <p className="text-sm font-medium text-brand-600">{t.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{t.specialty}</p>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-sm font-semibold text-amber-600">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-brand-100 px-2.5 py-1 text-sm font-semibold text-brand-700">
                     <Icon name="star" className="h-3.5 w-3.5" />
                     {t.rating.toFixed(1)}
                   </span>

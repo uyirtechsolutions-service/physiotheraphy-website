@@ -1,12 +1,10 @@
 import { configureStore, createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Service, Therapist } from "./data";
+import type { Service } from "./data";
 
 export type Booking = {
   reference: string;
   service: Service;
-  therapist: Therapist;
   date: string;
-  time: string;
   name: string;
   email: string;
   phone: string;

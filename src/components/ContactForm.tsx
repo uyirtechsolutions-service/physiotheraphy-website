@@ -7,19 +7,42 @@ export default function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function update(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!form.name.trim()) errs.name = "Name is required";
     if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) errs.email = "Enter a valid email address";
     if (form.message.trim().length < 10) errs.message = "Message must be at least 10 characters";
     setErrors(errs);
-    if (Object.keys(errs).length === 0) setSent(true);
+    if (Object.keys(errs).length > 0) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch("/api/send-contact-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to send contact message");
+      }
+    } catch (error) {
+      console.error("Error sending contact message:", error);
+    } finally {
+      setLoading(false);
+      setSent(true);
+    }
   }
 
   if (sent) {
@@ -75,10 +98,17 @@ export default function ContactForm() {
       </div>
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+        disabled={loading}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Send Message
-        <Icon name="arrow-right" className="h-4 w-4" />
+        {loading ? (
+          <>Sending...</>
+        ) : (
+          <>
+            Send Message
+            <Icon name="arrow-right" className="h-4 w-4" />
+          </>
+        )}
       </button>
     </form>
   );

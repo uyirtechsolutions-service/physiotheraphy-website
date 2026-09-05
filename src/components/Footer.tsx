@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { aboutClinicImage } from "@/lib/images";
 import { clinic, services } from "@/lib/data";
@@ -13,10 +16,15 @@ const quickLinks = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
   const year = new Date().getFullYear();
   const waHref = `https://wa.me/${clinic.whatsapp}?text=${encodeURIComponent(
     "Hi, I'd like to book a physiotherapy appointment."
   )}`;
+
+  if (pathname === "/") {
+    return null;
+  }
 
   return (
     <footer className="relative overflow-hidden bg-brand-950 text-brand-100">
