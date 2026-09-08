@@ -8,6 +8,7 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   function update(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -22,6 +23,7 @@ export default function ContactForm() {
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
 
+    setSubmitError("");
     setLoading(true);
     try {
       const response = await fetch("/api/send-contact-email", {
@@ -35,13 +37,20 @@ export default function ContactForm() {
       });
 
       if (!response.ok) {
-        console.error("Failed to send contact message");
+        const result = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(result?.error || "We couldn't send your message. Please try again.");
       }
+
+      setSent(true);
     } catch (error) {
       console.error("Error sending contact message:", error);
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "We couldn't send your message. Please try again."
+      );
     } finally {
       setLoading(false);
-      setSent(true);
     }
   }
 
@@ -96,6 +105,11 @@ export default function ContactForm() {
         />
         {errors.message && <p className="mt-1 text-xs text-red-600">{errors.message}</p>}
       </div>
+      {submitError && (
+        <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {submitError}
+        </p>
+      )}
       <button
         type="submit"
         disabled={loading}

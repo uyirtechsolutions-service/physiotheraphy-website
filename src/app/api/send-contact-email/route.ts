@@ -125,27 +125,39 @@ async function appendContactToGoogleSheet(contact: ContactEmailRequest) {
 export async function POST(request: Request) {
   try {
     const contact = (await request.json()) as ContactEmailRequest;
+    const name = contact.name?.trim();
+    const email = contact.email?.trim();
+    const message = contact.message?.trim();
 
     // Validate required fields
-    if (!contact.name || !contact.email || !contact.message) {
+    if (!name || !email || !message) {
       return Response.json(
         { error: "Missing required contact information" },
         { status: 400 }
       );
     }
 
-    if (contact.message.trim().length < 10) {
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      return Response.json(
+        { error: "Please provide a valid email address" },
+        { status: 400 }
+      );
+    }
+
+    if (message.length < 10) {
       return Response.json(
         { error: "Message must be at least 10 characters" },
         { status: 400 }
       );
     }
 
+    const normalizedContact = { name, email, message };
+
     // Keep each notification independent so one integration outage does not block the contact.
     const results = await Promise.allSettled([
-      sendContactNotification(contact),
-      sendContactAutoReply(contact),
-      appendContactToGoogleSheet(contact),
+      sendContactNotification(normalizedContact),
+      sendContactAutoReply(normalizedContact),
+      appendContactToGoogleSheet(normalizedContact),
     ]);
 
     results.forEach((result) => {
@@ -153,6 +165,13 @@ export async function POST(request: Request) {
         console.error("Contact notification failed:", result.reason);
       }
     });
+
+    if (results.every((result) => result.status === "rejected")) {
+      return Response.json(
+        { error: "Contact message delivery is not configured. Please call or WhatsApp us." },
+        { status: 502 }
+      );
+    }
 
     return Response.json(
       { success: true, message: "Contact message sent successfully" },

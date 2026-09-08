@@ -11,7 +11,7 @@ export default function FloatingWidgets() {
   const waHref = `https://wa.me/${clinic.whatsapp}?text=${message}`;
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3 sm:right-5 lg:bottom-5">
       {/* WhatsApp widget */}
       <a
         href={waHref}
@@ -33,7 +33,7 @@ export default function FloatingWidgets() {
       <Link
         href="/book"
         aria-label="Book an appointment"
-        className="group flex items-center gap-3"
+        className="group hidden items-center gap-3 lg:flex"
       >
         <span className="pointer-events-none hidden translate-x-2 rounded-xl bg-slate-900/90 px-3 py-2 text-sm font-semibold text-white opacity-0 shadow-lg backdrop-blur transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:block">
           Book Appointment

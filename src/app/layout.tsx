@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Providers>
           <ScrollToTop />
           <Navbar />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 pb-24 lg:pb-0">{children}</main>
           <Footer />
           <FloatingWidgets />
         </Providers>

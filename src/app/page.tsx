@@ -38,7 +38,7 @@ function Hero() {
       />
       <div className="absolute inset-0 bg-brand-50/5" />
       <div className="relative min-h-[680px] lg:min-h-[520px]">
-        <div className="relative flex min-h-[680px] items-center px-6 py-16 sm:px-12 lg:min-h-[520px] lg:px-[max(4rem,calc((100vw-1400px)/2+4rem))] lg:py-8">
+        <div className="relative flex min-h-[680px] items-center px-6 py-16 sm:px-12 lg:min-h-[520px] lg:px-[max(8rem,calc((100vw-1400px)/2+2rem))] lg:py-8">
           <div className="relative z-10 max-w-[540px] animate-fade-up">
             <span className="inline-flex items-center gap-3 rounded-full border border-brand-700/50 bg-brand-50/90 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-brand-800">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-700 text-brand-50">

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { Icon } from "@/components/icons";
 import { clinic } from "@/lib/data";
 
@@ -13,9 +12,16 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
+const mobileLinks = [
+  { href: "/", label: "Home", icon: "home" },
+  { href: "/services", label: "Services", icon: "activity" },
+  { href: "/book", label: "Book", icon: "calendar" },
+  { href: "/about", label: "About", icon: "users" },
+  { href: "/contact", label: "Contact", icon: "message-circle" },
+];
+
 export default function Navbar() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
 
   return (
     <div className="sticky top-0 z-50">
@@ -43,7 +49,7 @@ export default function Navbar() {
 
       <header className="border-b border-brand-200/70 bg-brand-50/95 backdrop-blur">
         <nav className="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-4 sm:px-8 lg:px-12">
-          <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
+          <Link href="/" className="flex items-center gap-2.5">
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-800 text-brand-50 shadow-sm ring-4 ring-brand-200/50">
               <Icon name="activity" className="h-5 w-5" />
             </span>
@@ -55,7 +61,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-7 md:flex">
+          <div className="hidden items-center gap-7 lg:flex">
             {links.map((link) => {
               const active = link.href === "/" ? pathname === "/" : pathname === link.href;
               return (
@@ -75,7 +81,7 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="hidden items-center gap-4 md:flex">
+          <div className="hidden items-center gap-4 lg:flex">
            
             <Link
               href="/book"
@@ -86,54 +92,42 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-brand-700 md:hidden"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            <Icon name={open ? "x" : "menu"} className="h-6 w-6" />
-          </button>
         </nav>
+      </header>
 
-        {open && (
-          <div className="border-t border-brand-200 bg-brand-50 px-4 pb-4 pt-2 md:hidden">
-            <div className="flex flex-col gap-1">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className={`rounded-lg px-3 py-2.5 text-sm font-medium ${
-                    pathname === link.href
-                      ? "bg-brand-50 text-brand-700"
-                      : "text-brand-700/75 hover:bg-brand-100"
+      <nav
+        aria-label="Mobile navigation"
+        className="fixed inset-x-0 bottom-0 z-50 border-t border-brand-200/80 bg-brand-50/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(36,54,43,0.12)] backdrop-blur-lg lg:hidden"
+      >
+        <div className="mx-auto grid h-[4.5rem] max-w-lg grid-cols-5 items-end px-2">
+          {mobileLinks.map((link) => {
+            const active = link.href === "/" ? pathname === "/" : pathname === link.href;
+            const isBooking = link.href === "/book";
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={active ? "page" : undefined}
+                className={`group flex h-full flex-col items-center justify-end gap-1 pb-2 text-[10px] font-semibold transition-colors ${
+                  isBooking ? "text-brand-800" : active ? "text-brand-600" : "text-brand-500/75"
+                }`}
+              >
+                <span
+                  className={`flex items-center justify-center transition-all ${
+                    isBooking
+                      ? "-mt-8 h-14 w-14 rounded-full border-4 border-brand-50 bg-brand-gold text-brand-950 shadow-lg shadow-brand-800/20 group-hover:-translate-y-0.5"
+                      : "h-7 w-10 rounded-full group-hover:bg-brand-100"
                   }`}
                 >
-                  {link.label}
-                </Link>
-              ))}
-              <Link
-                href="/book"
-                onClick={() => setOpen(false)}
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white"
-              >
-                <Icon name="calendar" className="h-4 w-4" />
-                Book Appointment
+                  <Icon name={link.icon} className={isBooking ? "h-6 w-6" : "h-5 w-5"} />
+                </span>
+                <span>{link.label}</span>
               </Link>
-              <a
-                href={`https://wa.me/${clinic.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-flex items-center justify-center gap-2 rounded-full border border-[#25D366]/40 px-5 py-2.5 text-sm font-semibold text-[#16a34a]"
-              >
-                <Icon name="whatsapp" className="h-4 w-4" />
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        )}
-      </header>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
