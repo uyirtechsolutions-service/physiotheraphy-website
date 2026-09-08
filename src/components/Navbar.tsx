@@ -27,23 +27,31 @@ export default function Navbar() {
     <div className="sticky top-0 z-50">
       {/* Top info bar */}
       <div className="bg-brand-800 text-brand-50">
-        <div className="mx-auto flex min-h-10 max-w-[1400px] flex-wrap items-center justify-between gap-x-5 gap-y-1 px-4 py-2 text-xs sm:px-8 lg:px-12">
-          <div className="flex items-center gap-5">
-            <span className="inline-flex items-center gap-1.5">
-              <Icon name="phone" className="h-3.5 w-3.5 text-brand-200" />
-              <a href={`tel:${clinic.phone.replace(/[^+\d]/g, "")}`} className="hover:text-white">
-                {clinic.phone}
-              </a>
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Icon name="clock" className="h-3.5 w-3.5 text-brand-200" />
-              Mon – Sat: 9:00 AM – 8:00 PM
-            </span>
+        <div className="overflow-hidden whitespace-nowrap">
+          <div className="flex w-max motion-safe:animate-marquee">
+            {[0, 1].map((copy) => (
+              <div
+                key={copy}
+                aria-hidden={copy === 1}
+                className="flex items-center gap-5 px-3 py-2 text-[11px] sm:min-h-10 sm:px-8 sm:text-xs lg:px-12"
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="phone" className="h-3.5 w-3.5 text-brand-200" />
+                  <a href={`tel:${clinic.phone.replace(/[^+\d]/g, "")}`} className="hover:text-white">
+                    {clinic.phone}
+                  </a>
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="clock" className="h-3.5 w-3.5 text-brand-200" />
+                  Mon – Sat: 9:00 AM – 8:00 PM
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon name="map-pin" className="h-3.5 w-3.5 text-brand-200" />
+                  {clinic.address}
+                </span>
+              </div>
+            ))}
           </div>
-          <span className="inline-flex items-center gap-1.5">
-            <Icon name="map-pin" className="h-3.5 w-3.5 text-brand-200" />
-            {clinic.address}
-          </span>
         </div>
       </div>
 

@@ -36,46 +36,46 @@ function Hero() {
         sizes="100vw"
         className="object-cover object-center"
       />
-      <div className="absolute inset-0 bg-brand-50/5" />
+        <div className="absolute inset-0 bg-brand-50/60 lg:bg-transparent" />
       <div className="relative min-h-[680px] lg:min-h-[520px]">
-        <div className="relative flex min-h-[680px] items-center px-6 py-16 sm:px-12 lg:min-h-[520px] lg:px-[max(8rem,calc((100vw-1400px)/2+2rem))] lg:py-8">
-          <div className="relative z-10 max-w-[540px] animate-fade-up">
+        <div className="relative flex min-h-[680px] items-center px-6 py-16 text-center sm:px-12 sm:text-left lg:min-h-[520px] lg:px-[max(8rem,calc((100vw-1400px)/2+2rem))] lg:py-8">
+          <div className="relative z-10 mx-auto max-w-[540px] animate-fade-up sm:mx-0">
             <span className="inline-flex items-center gap-3 rounded-full border border-brand-700/50 bg-brand-50/90 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-brand-800">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-700 text-brand-50">
                 <Icon name="user" className="h-4 w-4 text-brand-50" />
               </span>
               {clinic.tagline}
             </span>
-            <h1 className="mt-5 text-6xl leading-[0.94] tracking-tight text-brand-800 sm:text-7xl lg:text-[4.25rem]">
+            <h1 className="mt-5 text-5xl leading-[0.94] tracking-tight text-brand-800 sm:text-7xl lg:text-[4.25rem]">
               Recover.
               <br />
               <span className="text-brand-800">Strengthen.</span>
               <br />
               Perform.
             </h1>
-            <span className="mt-5 block h-0.5 w-14 bg-brand-700" />
+            <span className="mt-5 hidden h-0.5 w-14 bg-brand-700 sm:block" />
             <p className="mt-4 max-w-lg text-base leading-7 text-brand-700 sm:text-lg">
               Expert care. Personalised recovery.
               <br />
               Stronger you, every day.
             </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:items-start">
               <Link
                 href="/book"
-                className="inline-flex items-center justify-center gap-2 rounded-md bg-brand-800 px-6 py-3.5 text-sm font-semibold text-brand-50 shadow-lg transition-colors hover:bg-brand-700"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand-800 px-6 py-3.5 text-sm font-semibold text-brand-50 shadow-lg transition-colors hover:bg-brand-700 sm:w-56"
               >
                 <Icon name="calendar" className="h-5 w-5" />
                 Book an appointment
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center justify-center gap-3 rounded-md border border-brand-500/70 px-6 py-3.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100"
+                className="inline-flex w-full items-center justify-center gap-3 rounded-md border border-brand-500/70 px-6 py-3.5 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-100 sm:w-56"
               >
                 Explore services
                 <Icon name="arrow-right" className="h-4 w-4" />
               </Link>
             </div>
-            <div className="mt-6 flex items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-start">
               <div className="flex gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Icon key={i} name="star" className="h-5 w-5 text-[#c89b2c]" />

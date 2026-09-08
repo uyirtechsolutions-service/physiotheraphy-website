@@ -28,6 +28,7 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: Georgia, Cambria, "Times New Roman", serif;
   --animate-float: float 6s ease-in-out infinite;
+  --animate-marquee: marquee 24s linear infinite;
   --animate-fade-up: fade-up 0.7s ease-out both;
   --animate-pulse-slow: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -39,6 +40,15 @@
   }
   50% {
     transform: translateY(-12px);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }
 

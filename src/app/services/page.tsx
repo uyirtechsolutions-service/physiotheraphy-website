@@ -23,7 +23,7 @@ export default function ServicesPage() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-brand-50/15" />
+        <div className="absolute inset-0 bg-brand-50/40" />
         <div className="relative z-10 mx-auto flex min-h-[320px] w-full max-w-[1400px] items-center px-6 py-10 sm:px-12 lg:px-[max(8rem,calc((100vw-1400px)/2+2rem))] lg:py-6">
           <div className="max-w-3xl animate-fade-up">
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">Our services</p>

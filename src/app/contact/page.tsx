@@ -52,7 +52,7 @@ export default function ContactPage() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-brand-50/15" />
+        <div className="absolute inset-0 bg-brand-50/40" />
         <div className="relative z-10 mx-auto flex min-h-[420px] w-full max-w-[1400px] items-center px-6 py-16 sm:px-12 lg:px-[max(8rem,calc((100vw-1400px)/2+2rem))] lg:py-8">
           <div className="max-w-3xl animate-fade-up">
           <span className="inline-flex items-center gap-2 rounded-full border border-brand-700/50 bg-brand-50/90 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-brand-800">
