@@ -16,7 +16,6 @@ export default function Home() {
       <StatsExp/>
       <ServicesSection />
       <WhyUs />
-      
       <Testimonials />
       <FaqSection />
       <CTA />
@@ -54,10 +53,9 @@ function Hero() {
               Perform.
             </h1>
             <span className="mt-5 hidden h-0.5 w-14 bg-brand-700 sm:block" />
-            <p className="mt-4 max-w-lg text-base leading-7 text-brand-700 sm:text-lg">
-              Expert care. Personalised recovery.
-              <br />
-              Stronger you, every day.
+            <p className="mt-1 max-w-lg text-xs leading-5 text-brand-700 lg:text-[15px] lg:leading-6">
+              Personalized physiotherapy and rehabilitation programs designed to reduce pain, restore
+              movement, improve strength, and help you return to your daily activities with confidence.
             </p>
             <div className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:items-start">
               <Link
@@ -75,7 +73,7 @@ function Hero() {
                 <Icon name="arrow-right" className="h-4 w-4" />
               </Link>
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-start">
+            <div className="mt-3 mb-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-start">
               <div className="flex gap-1">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Icon key={i} name="star" className="h-5 w-5 text-[#c89b2c]" />
@@ -104,8 +102,8 @@ function Stats() {
     <section className="relative z-10 mx-auto -mt-24 max-w-[1400px] px-4 sm:px-8 lg:-mt-6 lg:px-12">
       <div className="grid overflow-hidden rounded-xl bg-brand-50/95 shadow-xl ring-1 ring-brand-100 backdrop-blur-sm sm:grid-cols-2 lg:grid-cols-4">
         {benefits.map((benefit, index) => (
-          <div key={benefit.title} className={`flex items-center gap-4 px-6 py-6 lg:px-7 lg:py-5 ${index > 0 ? "border-t border-brand-200/70 sm:border-l sm:border-t-0" : ""}`}>
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-800">
+          <div key={benefit.title} className={`group flex items-center gap-4 px-6 py-6 transition-colors duration-300 hover:bg-white lg:px-7 lg:py-5 ${index > 0 ? "border-t border-brand-200/70 sm:border-l sm:border-t-0" : ""}`}>
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-800 transition-transform duration-300 group-hover:scale-110">
               <Icon name={benefit.icon} className="h-7 w-7" />
             </span>
             <div>
@@ -134,7 +132,7 @@ function ServicesSection() {
         </div>
         <Link
           href="/services"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-700"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-600 transition-colors hover:text-brand-700"
         >
           View all services
           <Icon name="arrow-right" className="h-4 w-4" />
@@ -166,23 +164,33 @@ function WhyUs() {
           <h2 className="mt-3 max-w-2xl text-4xl leading-tight tracking-tight sm:text-5xl">
             A more personal path to recovery
           </h2>
-          {/* <p className="mt-5 max-w-2xl text-base leading-7 text-brand-700 sm:text-lg">
-            From your first assessment to your final session, your care is shaped around the way you move,
-            live and want to feel.
-          </p> */}
+          <p className="mt-5 max-w-lg text-base leading-7 text-brand-700  text-sm">
+            At The Origin Physiotherapy and Rehabilitation, we provide personalized physiotherapy and
+            rehabilitation programs designed to reduce pain, restore movement, improve strength, and help
+            you return to your daily activities with confidence. Our treatment approach focuses on
+            understanding the underlying cause of your problem and creating a rehabilitation plan suited to
+            your individual needs.
+          </p>
           <div className="mt-10 grid gap-4 sm:grid-cols-2">
             {values.map((v) => (
               <div
                 key={v.title}
-                className="rounded-xl border border-brand-200/80 bg-brand-50/95 p-5 shadow-lg shadow-brand-900/10 backdrop-blur-sm"
+                className="group rounded-xl border border-brand-200/80 bg-brand-50/95 p-5 shadow-lg shadow-brand-900/10 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-400/80 hover:shadow-xl"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-800 text-brand-50">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-800 text-brand-50 transition-transform duration-300 group-hover:scale-110">
                   <Icon name={v.icon} className="h-5 w-5" />
                 </span>
                 <h3 className="mt-4 text-lg font-semibold">{v.title}</h3>
                 <p className="mt-1 text-sm leading-6 text-brand-700">{v.description}</p>
               </div>
             ))}
+          </div>
+
+          <div className="mt-10 rounded-xl border border-brand-200/80 bg-brand-50/95 p-6 shadow-lg backdrop-blur-sm">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-600">Our goal</p>
+            <p className="mt-2 text-xl font-semibold leading-snug text-brand-800 sm:text-2xl">
+              Recover your movement. Strengthen your body. Perform at your best.
+            </p>
           </div>
         </div>
       </div>
@@ -253,7 +261,7 @@ function Testimonials() {
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {testimonials.map((t) => (
-            <figure key={t.name} className="rounded-2xl border border-slate-200 bg-white p-8">
+            <figure key={t.name} className="rounded-2xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <Icon name="quote" className="h-8 w-8 text-brand-200" />
               <blockquote className="mt-4 text-slate-700">{t.text}</blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
@@ -286,39 +294,39 @@ function CTA() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div className="relative overflow-hidden rounded-3xl px-6 py-20 text-center text-white sm:px-16">
-        <Image
-          src={servicesImage}
-          alt=""
-          fill
-          sizes="(max-width: 1024px) 100vw, 80vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-700/95 to-brand-900/95" />
-        <div className="relative">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to start your recovery?</h2>
-          <p className="mx-auto mt-4 max-w-xl text-brand-100">
-            Book your appointment online in minutes, or call us and we&apos;ll find the right therapist for
-            you.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/book"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
-            >
-              <Icon name="calendar" className="h-4 w-4" />
-              Book an appointment
-            </Link>
-            <a
-              href={`tel:${clinic.phone.replace(/[^+\d]/g, "")}`}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              <Icon name="phone" className="h-4 w-4" />
-              {clinic.phone}
-            </a>
+          <Image
+            src={servicesImage}
+            alt=""
+            fill
+            sizes="(max-width: 1024px) 100vw, 80vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-700/95 to-brand-900/95" />
+          <div className="relative">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to start your recovery?</h2>
+            <p className="mx-auto mt-4 max-w-xl text-brand-100">
+              Book your appointment online in minutes, or call us and we&apos;ll find the right therapist for
+              you.
+            </p>
+            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <Link
+                href="/book"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50"
+              >
+                <Icon name="calendar" className="h-4 w-4" />
+                Book an appointment
+              </Link>
+              <a
+                href={`tel:${clinic.phone.replace(/[^+\d]/g, "")}`}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              >
+                <Icon name="phone" className="h-4 w-4" />
+                {clinic.phone}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
 

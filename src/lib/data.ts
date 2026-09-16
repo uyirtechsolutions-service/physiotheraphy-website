@@ -1,13 +1,10 @@
 import type { StaticImageData } from "next/image";
 import {
-  aboutStoryImage,
-  aboutClinicImage,
   contactImage,
   whyUsImage,
   servicesImage,
   rehabExerciseImage,
   careTeamImage,
-  homeVisitImage,
   neurologicalRehabilitationImage,
   orthopedicRehabilitationImage,
   painManagementImage,
@@ -17,7 +14,6 @@ import {
   serviceLogoGeriatric,
   serviceLogoWomensHealth,
   serviceLogoPregnancy,
-  serviceLogoPelvicFloor,
   serviceLogoOnline,
 } from "./images";
 
@@ -25,6 +21,7 @@ export type Service = {
   id: string;
   title: string;
   description: string;
+  items?: string[];
   icon: string;
   image: StaticImageData;
   logo?: StaticImageData;
@@ -46,8 +43,9 @@ export const clinic = {
   phone: "+91 81228 86662",
   whatsapp: "918122886662",
   email: "theorigin.physios@gmail.com",
-  address: "Saibaba Colony, Coimbatore, Tamil Nadu, India",
-  mapsUrl: "https://maps.google.com/maps?q=11.0253336%2C76.9444102&z=17&hl=en",
+  address: "2nd Cross, SRP Nagar, Saibaba Colony, Coimbatore",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=The%20Origin%20Physiotherapy%2C%202nd%20Cross%2C%20SRP%20Nagar%2C%20Saibaba%20Colony%2C%20Coimbatore",
   hours: [
     { days: "Monday – Saturday", time: "9:00 AM – 8:00 PM" },
     { days: "Sunday", time: "Closed" },
@@ -59,7 +57,16 @@ export const services: Service[] = [
     id: "pain-management",
     title: "Pain Management",
     description:
-      "Targeted relief for chronic and acute pain through manual therapy, modalities and therapeutic exercise.",
+      "We help manage and reduce pain related to muscles, joints, spine and other musculoskeletal conditions.",
+    items: [
+      "Back and neck pain",
+      "Knee pain",
+      "Shoulder pain",
+      "Joint pain and stiffness",
+      "Muscle injuries",
+      "Sports-related pain",
+      "Postural problems",
+    ],
     icon: "zap",
     image: painManagementImage,
     logo: serviceLogoPain,
@@ -68,7 +75,16 @@ export const services: Service[] = [
     id: "orthopedic-rehab",
     title: "Orthopedic Rehabilitation",
     description:
-      "Recovery for fractures, joint replacements and musculoskeletal injuries to restore strength and mobility.",
+      "Our orthopedic rehabilitation programs are designed to restore mobility, strength and function following injuries, surgeries and orthopedic conditions.",
+    items: [
+      "Post-operative rehabilitation",
+      "Fracture rehabilitation",
+      "Joint replacement rehabilitation",
+      "Ligament and muscle injuries",
+      "Arthritis management",
+      "Sports injury rehabilitation",
+      "Strength and mobility training",
+    ],
     icon: "bone",
     image: orthopedicRehabilitationImage,
     logo: serviceLogoOrthopedic,
@@ -77,7 +93,15 @@ export const services: Service[] = [
     id: "neurological-rehab",
     title: "Neurological Rehabilitation",
     description:
-      "Specialized therapy for stroke, Parkinson's and spinal cord injuries to rebuild function and independence.",
+      "We provide individualized rehabilitation to improve movement, balance, coordination and functional independence in people with neurological conditions.",
+    items: [
+      "Stroke",
+      "Paralysis",
+      "Balance and coordination problems",
+      "Neurological weakness",
+      "Mobility difficulties",
+      "Functional movement limitations",
+    ],
     icon: "sparkles",
     image: neurologicalRehabilitationImage,
     logo: serviceLogoNeurological,
@@ -86,59 +110,76 @@ export const services: Service[] = [
     id: "geriatric-rehab",
     title: "Geriatric Rehabilitation",
     description:
-      "Gentle, safe programs for older adults to improve balance, prevent falls and maintain independence.",
+      "Our geriatric physiotherapy programs help older adults maintain mobility, strength, balance and independence.",
+    items: [
+      "Fall prevention",
+      "Balance training",
+      "Strengthening exercises",
+      "Walking and mobility training",
+      "Joint stiffness management",
+      "Post-operative recovery",
+      "Improving independence in daily activities",
+    ],
     icon: "users",
     image: careTeamImage,
     logo: serviceLogoGeriatric,
   },
   {
     id: "womens-health",
-    title: "Women's Health",
+    title: "Women's Physiotherapy",
     description:
-      "Holistic physiotherapy for women at every stage of life, from adolescence to menopause.",
+      "Specialized physiotherapy can help women manage physical changes and musculoskeletal problems associated with different stages of life.",
+    items: [
+      "Pregnancy-related musculoskeletal problems",
+      "Back and pelvic pain",
+      "Postural changes",
+      "Strength and mobility training",
+      "Recovery after childbirth",
+      "Functional rehabilitation",
+    ],
     icon: "heart",
     image: whyUsImage,
     logo: serviceLogoWomensHealth,
   },
   {
     id: "pre-post-pregnancy",
-    title: "Pre & Post Pregnancy Rehabilitation",
+    title: "Pregnancy & Post-Pregnancy Rehabilitation",
     description:
-      "Supportive care through pregnancy and post-partum to manage pain, restore core strength and aid recovery.",
+      "Physiotherapy can help women safely manage physical changes during pregnancy and regain strength and function after childbirth.",
+    items: [
+      "Pregnancy-related back and pelvic pain management",
+      "Postural correction",
+      "Mobility exercises",
+      "Safe strengthening",
+      "Breathing and relaxation exercises",
+      "Post-pregnancy strengthening",
+      "Functional recovery",
+    ],
     icon: "baby",
     image: servicesImage,
     logo: serviceLogoPregnancy,
   },
   {
-    id: "pelvic-floor",
-    title: "Pelvic Floor Rehabilitation",
+    id: "supportive-care",
+    title: "Rehabilitation & Supportive Care",
     description:
-      "Specialized treatment for pelvic floor dysfunction, incontinence and post-natal recovery.",
-    icon: "activity",
-    image: careTeamImage,
-    logo: serviceLogoPelvicFloor,
-  },
-  {
-    id: "pulmonary-rehab",
-    title: "Pulmonary Rehabilitation",
-    description:
-      "Breathing exercises and conditioning to improve lung function and endurance for respiratory conditions.",
-    icon: "lungs",
+      "We provide supportive physiotherapy and rehabilitation focused on maintaining mobility, strength and quality of life for individuals experiencing long-term physical challenges. Treatment is customized according to the person's condition, functional ability and goals.",
+    icon: "shield",
     image: rehabExerciseImage,
   },
   {
-    id: "home-visit",
-    title: "Home Visit",
-    description:
-      "Convenient physiotherapy in the comfort of your home, ideal for limited mobility or busy schedules.",
-    icon: "home",
-    image: homeVisitImage,
-  },
-  {
     id: "online-consultation",
-    title: "Online Consultation",
+    title: "Online Physiotherapy Consultation",
     description:
-      "Video consultations and guided exercise programs with a physiotherapist from anywhere.",
+      "Get professional physiotherapy guidance from the comfort of your home through online consultation.",
+    items: [
+      "Exercise guidance",
+      "Pain-management advice",
+      "Posture assessment",
+      "Home exercise programs",
+      "Rehabilitation follow-up",
+      "Progress monitoring",
+    ],
     icon: "video",
     image: contactImage,
     logo: serviceLogoOnline,
@@ -215,29 +256,29 @@ export const stats = [
   { value: "12+", label: "Years of experience" },
   { value: "5,000+", label: "Patients treated" },
   { value: "98%", label: "Satisfaction rate" },
-  { value: "10", label: "Specialised services" },
+  { value: "8", label: "Specialised services" },
 ];
 
 export const values = [
   {
     title: "Personalized Care",
-    description: "Every treatment plan is tailored to your body, your goals and your lifestyle — never one-size-fits-all.",
+    description: "Every patient receives an individualized assessment and treatment plan.",
     icon: "user",
   },
   {
-    title: "Evidence-Based Practice",
-    description: "We combine the latest clinical research with hands-on experience to deliver proven results.",
+    title: "Goal-Oriented Rehabilitation",
+    description: "We focus on meaningful functional goals — not just temporary pain relief.",
+    icon: "check-circle",
+  },
+  {
+    title: "Evidence-Based Approach",
+    description: "Our treatment combines physiotherapy techniques, therapeutic exercises and progressive rehabilitation.",
     icon: "award",
   },
   {
-    title: "Compassionate Team",
-    description: "Our therapists listen first, then treat. You'll always feel heard, respected and supported.",
+    title: "Patient-Centered Care",
+    description: "We work together with you throughout your recovery journey.",
     icon: "heart",
-  },
-  {
-    title: "Long-Term Results",
-    description: "We don't just relieve symptoms — we fix the root cause and teach you how to stay pain-free.",
-    icon: "shield",
   },
 ];
 

@@ -1,5 +1,5 @@
-import heroImage from "./assets/originhomeimageofphase1.png";
 import homeReferenceImage from "./assets/or-home-og-01.png";
+import logoOriginPng from "./assets/logo-origin.png";
 import whyUsImage from "./assets/240_F_129317801_MwKHVueS7eQruPBTbSF760fx55kxBQBO.jpg";
 import aboutUsImage from "./assets/about-us-og-or.png";
 import aboutClinicImage from "./assets/360_F_257007919_4J2jQTuOlxXBxCu4gj1at3BS3PHdb9LV.jpg";
@@ -22,8 +22,8 @@ import serviceLogoPelvicFloor from "./assets/The_Origin_Service_Logos_High_Quali
 import serviceLogoOnline from "./assets/The_Origin_Service_Logos_High_Quality_Print_page-0008.jpg";
 
 export {
-  heroImage,
   homeReferenceImage,
+  logoOriginPng,
   whyUsImage,
   aboutUsImage,
   aboutClinicImage,

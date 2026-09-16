@@ -51,6 +51,45 @@ export default function ServicesPage() {
           ))}
         </div>
 
+        {/* Detailed services */}
+        <div className="mt-16">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand-600">What we treat</p>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              A closer look at our services
+            </h2>
+            <p className="mt-3 text-slate-600">
+              From pain relief to post-surgical recovery, here&apos;s how each program can help you.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {services.map((s) => (
+              <div
+                key={s.id}
+                className="flex flex-col rounded-xl border border-brand-200 bg-white p-6 shadow-sm sm:p-8"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-800">
+                    <Icon name={s.icon} className="h-5 w-5" />
+                  </span>
+                  <h3 className="text-xl font-semibold text-brand-800">{s.title}</h3>
+                </div>
+                <p className="mt-4 leading-7 text-slate-600">{s.description}</p>
+                {s.items && s.items.length > 0 && (
+                  <ul className="mt-5 grid gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                    {s.items.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-slate-600">
+                        <Icon name="check" className="mt-1 h-4 w-4 shrink-0 text-brand-600" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="mt-12 animate-fade-up rounded-xl border border-brand-200 bg-brand-100/45 p-8 text-center [animation-delay:400ms]">
           <h2 className="text-2xl tracking-tight text-brand-800">Not sure which treatment you need?</h2>
           <p className="mt-2 text-sm text-brand-700">

@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/icons";
 import { clinic } from "@/lib/data";
+import { logoOriginPng } from "@/lib/images";
 
 const links = [
   { href: "/", label: "Home" },
@@ -58,8 +60,14 @@ export default function Navbar() {
       <header className="border-b border-brand-200/70 bg-brand-50/95 backdrop-blur">
         <nav className="mx-auto flex h-20 max-w-[1400px] items-center justify-between px-4 sm:px-8 lg:px-12">
           <Link href="/" className="flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-800 text-brand-50 shadow-sm ring-4 ring-brand-200/50">
-              <Icon name="activity" className="h-5 w-5" />
+              <span className="flex h-10 w-10 items-center justify-center">
+              <Image
+                src={logoOriginPng}
+                alt="The Origin logo"
+                width={40}
+                height={40}
+                className="h-full w-full object-contain"
+              />
             </span>
             <span className="leading-tight">
               <span className="block font-serif text-2xl tracking-wide text-brand-800">{clinic.name}</span>

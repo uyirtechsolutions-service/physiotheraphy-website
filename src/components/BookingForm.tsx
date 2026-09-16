@@ -454,7 +454,7 @@ function StepTwo({
         {DAY_HEADERS.map((h) => (
           <span
             key={h}
-            className="py-0.5 text-center text-xs font-medium uppercase tracking-wide text-slate-400"
+            className="py-0 text-center text-xs font-medium uppercase tracking-wide text-slate-400"
           >
             {h}
           </span>
@@ -462,7 +462,7 @@ function StepTwo({
       </div>
 
       {/* Calendar grid */}
-      <div className="mt-0.5 grid grid-cols-7 gap-y-0.5">
+      <div className="mt-0.5 grid grid-cols-7">
         {cells.map((day, idx) => {
           if (day === null) {
             return <div key={`empty-${idx}`} />;
@@ -479,7 +479,7 @@ function StepTwo({
               type="button"
               disabled={disabled}
               onClick={() => onSelectDate(cellDate)}
-              className={`mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium transition-colors ${
+              className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors ${
                 selected
                   ? "bg-brand-600 text-white"
                   : disabled
