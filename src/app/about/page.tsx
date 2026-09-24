@@ -78,7 +78,7 @@ export default function AboutPage() {
               />
             </div>
             <div className="absolute -bottom-6 -right-4 hidden rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-slate-100 sm:block">
-              <p className="text-4xl text-brand-800">12+</p>
+              <p className="text-4xl text-brand-800">4+</p>
               <p className="mt-1 text-sm font-medium text-slate-500">Years of trusted care</p>
             </div>
           </div>

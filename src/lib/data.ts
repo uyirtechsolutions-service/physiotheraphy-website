@@ -195,7 +195,7 @@ export const therapists: Therapist[] = [
     name: "Dr. Jayashree PT",
     title: "Physiotherapist",
     specialty: "Women's Health & Pelvic Floor",
-    experience: 10,
+    experience: 4,
     rating: 4.9,
     initials: "JS",
   },
@@ -204,7 +204,7 @@ export const therapists: Therapist[] = [
     name: "Dr. Udhayakumar PT",
     title: "Physiotherapist",
     specialty: "Orthopedic & Neurological Rehab",
-    experience: 12,
+    experience: 4,
     rating: 4.8,
     initials: "UK",
   },
@@ -256,8 +256,8 @@ export const testimonials = [
 ];
 
 export const stats = [
-  { value: "12+", label: "Years of experience" },
-  { value: "5,000+", label: "Patients treated" },
+  { value: "4+", label: "Years of experience" },
+  { value: "5000+", label: "Patients treated" },
   { value: "98%", label: "Satisfaction rate" },
   { value: "8", label: "Specialised services" },
 ];
