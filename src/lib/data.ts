@@ -230,34 +230,26 @@ export const timeSlots = [
 
 export const testimonials = [
   {
-    name: "Marcus Rivera",
-    role: "Amateur Footballer",
+    name: "Ramesh Kumar",
     rating: 5,
-    text: "After my ACL surgery I thought I'd never play again. Six months with the team and I'm back on the pitch, stronger than ever.",
-  },
+    text: "Very good physiotherapy treatment. The doctor is kind, friendly, and caring. She explains everything clearly and gives excellent treatment. Highly recommended!"},
   {
-    name: "Priya Shah",
-    role: "Office Worker",
+    name: "Nishanth Udayan",
     rating: 5,
-    text: "The manual therapy sessions completely resolved my chronic back pain. I can finally sleep through the night without discomfort.",
-  },
+   text:"The therapist was very friendly, knowledgeable and attentive. She took time to understand my problem instead of rushing through the session.Clean and comfortable clinic with very good care. The exercises were explained properly and were easy to follow at home." },
   {
-    name: "Elena Volkov",
-    role: "Post-Surgery Patient",
+    name: "Vigneswari",
     rating: 5,
-    text: "Professional, caring and truly personalized. Every single session felt tailored to my recovery goals.",
-  },
+   text:"I had been experiencing persistant that was affecting my daily activities after starting my physiotherapy, i notices a gradual improvement in my pain and mobility and excercise were easy to follow physiotherapists was professional and supportive through out the session I have made and would recommend physiotherapy to anyone delling with pain and movement deficulty" },
   {
-    name: "David Turner",
-    role: "Parent",
+    name: "Katyayini Sinha",
     rating: 5,
-    text: "They treated my son's sports injury with so much patience and expertise. The progress was remarkable. Highly recommend.",
-  },
+    text:"I fell down and suffered from severe knee pain. A baker's cyst developed at the back of the knee. Udhay helped me by relieving pain through exercise and few of his equipments. I still continue those exercise and feel good strength in my both legs. Thank you Udhay for your help and support" },
 ];
 
 export const stats = [
   { value: "4+", label: "Years of experience" },
-  { value: "5000+", label: "Patients treated" },
+  { value: "2000+", label: "Patients treated" },
   { value: "98%", label: "Satisfaction rate" },
   { value: "8", label: "Specialised services" },
 ];

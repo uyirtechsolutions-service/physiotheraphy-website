@@ -32,6 +32,7 @@ function Hero() {
         alt="The Origin Physiotherapy clinic"
         fill
         priority
+        unoptimized
         sizes="100vw"
         className="object-cover object-center"
       />
@@ -263,7 +264,7 @@ function Testimonials() {
           {testimonials.map((t) => (
             <figure key={t.name} className="rounded-2xl border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
               <Icon name="quote" className="h-8 w-8 text-brand-200" />
-              <blockquote className="mt-4 text-slate-700">{t.text}</blockquote>
+              <blockquote className="mt-4 text-justify text-slate-700">{t.text}</blockquote>
               <figcaption className="mt-6 flex items-center gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100 text-sm font-bold text-brand-700">
                   {t.name
@@ -272,10 +273,7 @@ function Testimonials() {
                     .join("")
                     .slice(0, 2)}
                 </span>
-                <div>
-                  <p className="font-semibold text-slate-900">{t.name}</p>
-                  <p className="text-sm text-slate-500">{t.role}</p>
-                </div>
+                <p className="font-semibold text-slate-900">{t.name}</p>
                 <div className="ml-auto flex">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Icon key={i} name="star" className="h-4 w-4 text-brand-gold" />

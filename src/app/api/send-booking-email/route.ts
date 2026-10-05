@@ -129,8 +129,7 @@ async function appendBookingToGoogleSheet(booking: BookingEmailRequest) {
   const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!webhookUrl) {
-    console.warn("Google Sheets webhook is not configured; skipping booking row.");
-    return;
+    throw new Error("Google Sheets webhook is not configured. Set GOOGLE_SHEETS_WEBHOOK_URL.");
   }
 
   const response = await fetch(webhookUrl, {
