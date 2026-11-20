@@ -13,16 +13,17 @@ function Counter({ value, label, active }: CounterProps) {
   const match = value.match(/([\d,]+)(.*)/);
   const target = match ? Number(match[1].replace(/,/g, "")) : 0;
   const suffix = match?.[2] ?? "";
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(target);
 
   useEffect(() => {
     if (!active) return;
 
     const duration = 1400;
-    const start = performance.now();
+    let start = 0;
     let frame = 0;
 
     const update = (now: number) => {
+      if (start === 0) start = now;
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(target * eased));
@@ -32,7 +33,10 @@ function Counter({ value, label, active }: CounterProps) {
       }
     };
 
-    frame = requestAnimationFrame(update);
+    frame = requestAnimationFrame(() => {
+      setCount(0);
+      frame = requestAnimationFrame(update);
+    });
     return () => cancelAnimationFrame(frame);
   }, [active, target]);
 

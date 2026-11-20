@@ -12,6 +12,7 @@ const quickLinks = [
   { href: "/about", label: "About Us" },
   { href: "/contact", label: "Contact" },
   { href: "/book", label: "Book Appointment" },
+  { href: "/terms", label: "Terms and Conditions" },
 ];
 
 export default function Footer() {

@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Icon } from "@/components/icons";
+import ClinicStructuredData from "@/components/ClinicStructuredData";
 import Map from "@/components/Map";
 import Faq from "@/components/Faq";
 import ServiceCard from "@/components/ServiceCard";
@@ -8,9 +10,38 @@ import StatsExp from "@/components/StatsExp";
 import { homeReferenceImage, aboutUsImage, servicesImage } from "@/lib/images";
 import { clinic, services, testimonials, values } from "@/lib/data";
 
+export const metadata: Metadata = {
+  title: {
+    absolute: "Physiotherapy in Saibaba Colony, Coimbatore | The Origin",
+  },
+  description:
+    "Expert physiotherapy & rehabilitation in Saibaba Colony, Coimbatore. Pain, orthopedic, neuro & women's health. Mon-Sat 9-8. Call or book online.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Physiotherapy in Saibaba Colony, Coimbatore | The Origin",
+    description:
+      "Expert physiotherapy & rehabilitation in Saibaba Colony, Coimbatore. Pain, orthopedic, neuro & women's health. Mon-Sat 9-8. Call or book online.",
+    url: "/",
+    siteName: "The Origin Physiotherapy & Rehabilitation",
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Origin Physiotherapy & Rehabilitation in Saibaba Colony, Coimbatore",
+      },
+    ],
+  },
+};
+
 export default function Home() {
   return (
     <>
+      <ClinicStructuredData />
       <Hero />
       <Stats />
       <StatsExp/>

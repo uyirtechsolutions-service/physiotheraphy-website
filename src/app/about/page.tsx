@@ -4,10 +4,30 @@ import Image from "next/image";
 import { Icon } from "@/components/icons";
 import { aboutClinicImage, aboutStoryImage, rehabExerciseImage } from "@/lib/images";
 import { clinic, therapists, stats, values } from "@/lib/data";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "About Us",
-  description: "Learn about our clinic, our team and our approach to physiotherapy.",
+  title: { absolute: "About The Origin Physiotherapy | Coimbatore Therapists" },
+  description:
+    "Meet the physiotherapists at The Origin, Saibaba Colony, Coimbatore. Evidence-based, one-to-one rehabilitation for every age. Book your assessment.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About The Origin Physiotherapy | Coimbatore Therapists",
+    description:
+      "Meet the physiotherapists at The Origin, Saibaba Colony, Coimbatore. Evidence-based, one-to-one rehabilitation for every age. Book your assessment.",
+    url: "/about",
+    siteName: "The Origin Physiotherapy & Rehabilitation",
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Origin Physiotherapy & Rehabilitation in Saibaba Colony, Coimbatore",
+      },
+    ],
+  },
 };
 
 const highlights = [
@@ -20,6 +40,7 @@ const highlights = [
 export default function AboutPage() {
   return (
     <>
+      <Breadcrumbs items={[{ label: "About Us", href: "/about" }]} />
       <section className="relative overflow-hidden bg-brand-50 text-brand-800">
         <Image
           src={aboutClinicImage}

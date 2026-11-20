@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
 import ScrollToTop from "@/components/ScrollToTop";
 import Providers from "./providers";
+import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,12 +19,30 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "The Origin — Physiotherapy & Rehabilitation",
+    default: "Physiotherapy in Saibaba Colony, Coimbatore | The Origin",
     template: "%s | The Origin",
   },
   description:
     "Expert physiotherapy and rehabilitation in Saibaba Colony, Coimbatore. Book appointments for pain management, orthopedic, neurological and women's health care.",
+  openGraph: {
+    title: "Physiotherapy in Saibaba Colony, Coimbatore | The Origin",
+    description:
+      "Expert physiotherapy and rehabilitation in Saibaba Colony, Coimbatore. Book appointments for pain management, orthopedic, neurological and women's health care.",
+    url: "/",
+    siteName: SITE_NAME,
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Origin Physiotherapy & Rehabilitation in Saibaba Colony, Coimbatore",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -44,4 +63,3 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     </html>
   );
 }
-

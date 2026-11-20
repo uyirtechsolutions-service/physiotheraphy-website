@@ -5,15 +5,36 @@ import { Icon } from "@/components/icons";
 import ServiceCard from "@/components/ServiceCard";
 import { servicesImage } from "@/lib/images";
 import { services } from "@/lib/data";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Services",
-  description: "Explore our physiotherapy and rehabilitation services.",
+  title: { absolute: "Physiotherapy Services in Saibaba Colony | The Origin" },
+  description:
+    "Physiotherapy for back & knee pain, post-surgery, stroke, elderly care, women's & pregnancy health in Saibaba Colony, Coimbatore. Home & online visits.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Physiotherapy Services in Saibaba Colony | The Origin",
+    description:
+      "Physiotherapy for back & knee pain, post-surgery, stroke, elderly care, women's & pregnancy health in Saibaba Colony, Coimbatore. Home & online visits.",
+    url: "/services",
+    siteName: "The Origin Physiotherapy & Rehabilitation",
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Origin Physiotherapy & Rehabilitation in Saibaba Colony, Coimbatore",
+      },
+    ],
+  },
 };
 
 export default function ServicesPage() {
   return (
     <>
+      <Breadcrumbs items={[{ label: "Services", href: "/services" }]} />
       <section className="relative overflow-hidden bg-brand-50 text-brand-800">
         <Image
           src={servicesImage}

@@ -5,10 +5,31 @@ import ContactForm from "@/components/ContactForm";
 import Map from "@/components/Map";
 import { contactImage } from "@/lib/images";
 import { clinic } from "@/lib/data";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ClinicStructuredData from "@/components/ClinicStructuredData";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Get in touch with our physiotherapy clinic.",
+  title: { absolute: "Contact & Directions | The Origin, Saibaba Colony" },
+  description:
+    "Visit The Origin Physiotherapy at 2nd Cross, SRP Nagar, Saibaba Colony, Coimbatore. Open Mon-Sat 9 AM-8 PM. Call or WhatsApp +91 81228 86662.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact & Directions | The Origin, Saibaba Colony",
+    description:
+      "Visit The Origin Physiotherapy at 2nd Cross, SRP Nagar, Saibaba Colony, Coimbatore. Open Mon-Sat 9 AM-8 PM. Call or WhatsApp +91 81228 86662.",
+    url: "/contact",
+    siteName: "The Origin Physiotherapy & Rehabilitation",
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "The Origin Physiotherapy & Rehabilitation in Saibaba Colony, Coimbatore",
+      },
+    ],
+  },
 };
 
 export default function ContactPage() {
@@ -43,6 +64,8 @@ export default function ContactPage() {
 
   return (
     <>
+      <Breadcrumbs items={[{ label: "Contact", href: "/contact" }]} />
+      <ClinicStructuredData />
       <section className="relative overflow-hidden bg-brand-50 text-brand-800">
         <Image
           src={contactImage}
